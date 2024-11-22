@@ -18,7 +18,7 @@ namespace Monogame_5___Screens
 
         Vector2 tribbleGreySpeed, tribbleBrownSpeed, tribbleOrangeSpeed, tribbleCreamSpeed;
 
-        SpriteFont bouncefont, introfont;
+        SpriteFont bouncefont, introfont, endgamefont;
 
         Random generator = new Random();
 
@@ -30,7 +30,8 @@ namespace Monogame_5___Screens
         enum Screen
         {
             Intro,
-            TribbleYard
+            TribbleYard,
+            EndGame
         }
 
         Screen screen;
@@ -78,6 +79,7 @@ namespace Monogame_5___Screens
             tribbleIntroTexture = Content.Load<Texture2D>("tribble_intro");
             bouncefont = Content.Load<SpriteFont>("bounceFont");
             introfont = Content.Load<SpriteFont>("introFont");
+            endgamefont = Content.Load<SpriteFont>("endgameFont");
             
             // TODO: use this.Content to load your game content here
         }
@@ -148,14 +150,21 @@ namespace Monogame_5___Screens
                     bounces += 1;
                 }
                 if (bounces >= 100 || seconds >= 25)
+                    screen = Screen.EndGame;
+            }
+
+            else if (screen == Screen.EndGame)
+            {
+                if (mouseState.LeftButton == ButtonState.Pressed)
                     Exit();
             }
+            
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
 
             // TODO: Add your drawing code here
             _spriteBatch.Begin();
@@ -180,6 +189,15 @@ namespace Monogame_5___Screens
                 _spriteBatch.Draw(tribbleOrangeTexture, tribbleOrangeRect, Color.White);
                 _spriteBatch.DrawString(bouncefont, ("Bounces: " + bounces).ToString(), new Vector2(10, 10), Color.White);
                 _spriteBatch.DrawString(bouncefont, ("Time: " + seconds).ToString(), new Vector2(10, 50), Color.White);
+
+            }
+
+            else if (screen == Screen.EndGame)
+            {
+                _spriteBatch.DrawString(endgamefont, ("GAME OVER"), new Vector2(140, 100), Color.Red);
+                _spriteBatch.DrawString(endgamefont, ("Click the screen"), new Vector2(100, 210), Color.Red);
+                _spriteBatch.DrawString(endgamefont, ("to quit"), new Vector2(100, 270), Color.Red);
+
 
             }
             _spriteBatch.End();
